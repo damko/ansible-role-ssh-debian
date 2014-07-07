@@ -1,0 +1,15 @@
+---
+galaxy_info:
+  author: Damiano Venturin
+  description: "Install and configure ssh on Debian system. Optionally provides ssh-key based authentication system and sets ssh port"
+  company: 2V
+  license: BSD
+  min_ansible_version: 1.4
+  platforms:
+   - name: Debian
+     versions:
+      - all
+  categories:
+   - system
+   - networking
+dependencies: []

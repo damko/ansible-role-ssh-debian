@@ -1,0 +1,27 @@
+---
+# tasks file for ssh-debian
+
+- name: Install and update ssh packages
+  apt:
+    pkg: "{{item}}"
+    state: latest
+  with_items: ["openssh-client", "openssh-server"]
+
+# register a public ssh key for user root so that you can access the vm as root
+- name: Authorize ssh pub key for user root
+  authorized_key: user=root key="{{ lookup('file', '{{ssh_public_key}}') }}"
+  when: (ssh_password_based == false) and (ssh_pub_key_root != none)
+
+- name: Enable password-based login for ssh
+  lineinfile: dest=/etc/ssh/sshd_config regexp='^(#)?PasswordAuthentication' line='PasswordAuthentication yes' state=present
+  when: ssh_password_based == true
+
+- name: Disable password-based login for ssh
+  lineinfile: dest=/etc/ssh/sshd_config regexp='^(#)?PasswordAuthentication' line='PasswordAuthentication no' state=present
+  when: ssh_password_based == false
+
+- name: Change ssh port
+  lineinfile: dest=/etc/ssh/sshd_config regexp='Port' line='Port {{ssh_port}}' state=present
+  when: ssh_port != 22
+
+- service: name=ssh state=restarted enabled=yes

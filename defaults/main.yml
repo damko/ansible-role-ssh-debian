@@ -1,0 +1,14 @@
+---
+# defaults file for ssh-debian
+
+# if true the ssh daemon will use password and key-based authentication
+# if false the ssh daemon will use only key-based authentication
+ssh_password_based: true
+
+# if using the key-based authentication,
+# write here the path for root's ssh public key
+# and it will be added in the /root/.ssh/authorized_keys
+# Ex.: /home/user/.ssh/id_rsa.pub
+ssh_pub_key_root: none
+
+ssh_port: 22
