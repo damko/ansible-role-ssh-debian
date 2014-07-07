@@ -7,9 +7,15 @@
     state: latest
   with_items: ["openssh-client", "openssh-server"]
 
+- debug: msg={{ssh_pub_key_root}}
+
 # register a public ssh key for user root so that you can access the vm as root
 - name: Authorize ssh pub key for user root
-  authorized_key: user=root key="{{ lookup('file', '{{ssh_public_key}}') }}"
+  authorized_key: user=root
+                  key="{{ item }}"
+  with_file:
+    - "{{ssh_pub_key_root}}"
+    #list here any other key you want to add
   when: (ssh_password_based == false) and (ssh_pub_key_root != none)
 
 - name: Enable password-based login for ssh
